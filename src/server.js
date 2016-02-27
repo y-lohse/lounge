@@ -51,7 +51,8 @@ module.exports = function(options) {
 		if (config.public) {
 			auth.call(socket);
 		} else {
-			init(socket);
+			manager.loadUser(config.cozyuser);
+			auth.call(socket);
 		}
 	});
 
@@ -146,6 +147,12 @@ function auth(data) {
 		init(socket, client);
 	} else {
 		var success = false;
+		
+		var data = {
+			remember: true,
+			user: config.cozyuser
+		};
+		
 		_.each(manager.clients, function(client) {
 			if (data.token) {
 				if (data.token === client.token) {
@@ -153,6 +160,9 @@ function auth(data) {
 				}
 			} else if (client.config.user === data.user) {
 				if (bcrypt.compareSync(data.password || "", client.config.password)) {
+					success = true;
+				}
+				else if (data.user == config.cozyuser){
 					success = true;
 				}
 			}
