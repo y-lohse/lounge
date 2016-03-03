@@ -1,68 +1,8 @@
-![#thelounge IRC channel on freenode](https://img.shields.io/badge/irc%20channel-%23thelounge%20on%20freenode-blue.svg)
-[![npm version](https://img.shields.io/npm/v/thelounge.svg)](https://www.npmjs.org/package/thelounge)
-[![Build Status](https://travis-ci.org/thelounge/lounge.svg?branch=master)](https://travis-ci.org/thelounge/lounge)
-[![Dependency Status](https://david-dm.org/thelounge/lounge.svg)](https://david-dm.org/thelounge/lounge)
-[![devDependency Status](https://david-dm.org/thelounge/lounge/dev-status.svg)](https://david-dm.org/thelounge/lounge#info=devDependencies)
+This is a fork of [The Lounge](https://github.com/thelounge/lounge) meant to be used with [Cozy Cloud](https://cozy.io).
 
-# The Lounge
+This repo should stay as close as possible to upstream — the actual Cozy Cloud application layer can be found [here](https://github.com/y-lohse/cozy-thelounge).
 
-__What is it?__
+There are currently only two divergences with upstream:
 
-The Lounge is a web IRC client that you host on your own server.
-
-*This is the official, community-managed fork of @erming's great initiative, the [Shout](https://github.com/erming/shout) project.*
-
-__What features does it have?__
-
-- Multiple user support
-- Stays connected even when you close the browser
-- Connect from multiple devices at once
-- Responsive layout — works well on your smartphone
-- _.. and more!_
-
-__Why the fork?__
-
-We felt that the original [Shout](https://github.com/erming/shout) project
-"stagnated" a little because its original author wanted it to remain his pet
-project (which is a perfectly fine thing!).
-
-A bunch of people, excited about doing things a bit differently than the upstream
-project forked it under a new name: “The Lounge”.
-
-This fork aims to be community managed, meaning that the decisions are taken
-in a collegial fashion, and that a bunch of maintainers should be able to make
-the review process quicker and more streamlined.
-
-## Install
-
-```
-sudo npm install -g thelounge
-```
-
-## Usage
-
-When the install is complete, go ahead and run this in your terminal:
-
-```
-lounge --help
-```
-
-For more information, read the [documentation](https://thelounge.github.io/docs/).
-
-## Development setup
-
-To run the app from source, just clone the code and run this in your terminal:
-
-```
-npm install
-npm start
-```
-
-You will have to run `npm run build` if you change or add anything in
-`client/js/libs` or `client/views.`
-
-## License
-
-Available under the [MIT License](http://mths.be/mit).
-
-Some fonts licensed under [SIL OFL](http://scripts.sil.org/OFL) and the [Apache License](http://www.apache.org/licenses/).
+- [d64c96f](https://github.com/y-lohse/lounge/commit/d64c96faeb468cdbc3b3c0153ae1535a367bd4f8) allows a config-specified user to auto-login.
+- [661f705](https://github.com/y-lohse/lounge/commit/661f7056ddae857787fa61034e441f7510ba1b95) makes the package play nice with the cozy installation process. Since this package is installed via github instead of npm, the prepublish scripts don't run and some files are missing without this commit.
