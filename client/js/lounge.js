@@ -50,9 +50,7 @@ $(function() {
 
 	$(".tse-scrollable").TrackpadScrollEmulator();
 
-	var favico = new Favico({
-		animation: "none"
-	});
+	var favicon = $("#favicon");
 
 	function render(name, data) {
 		return Handlebars.templates[name](data);
@@ -426,6 +424,7 @@ $(function() {
 		users.data("nicks", nicks);
 	});
 
+	var userStyles = $("#user-specified-css");
 	var settings = $("#settings");
 	var options = $.extend({
 		badge: false,
@@ -440,19 +439,34 @@ $(function() {
 		thumbnails: true,
 		quit: true,
 		notifyAllMessages: false,
+		userStyles: userStyles.text(),
 	}, JSON.parse(window.localStorage.getItem("settings")));
 
 	for (var i in options) {
+		if (i === "userStyles") {
+			if (!/[\?&]nocss/.test(window.location.search)) {
+				$(document.head).find("#user-specified-css").html(options[i]);
+			}
+			settings.find("#user-specified-css-input").val(options[i]);
+			continue;
+		}
 		if (options[i]) {
 			settings.find("input[name=" + i + "]").prop("checked", true);
 		}
 	}
 
-	settings.on("change", "input", function() {
+	settings.on("change", "input, textarea", function() {
 		var self = $(this);
 		var name = self.attr("name");
-		options[name] = self.prop("checked");
+
+		if (self.attr("type") === "checkbox") {
+			options[name] = self.prop("checked");
+		} else {
+			options[name] = self.val();
+		}
+
 		window.localStorage.setItem("settings", JSON.stringify(options));
+
 		if ([
 			"join",
 			"mode",
@@ -466,6 +480,9 @@ $(function() {
 		}
 		if (name === "colors") {
 			chat.toggleClass("no-colors", !self.prop("checked"));
+		}
+		if (name === "userStyles") {
+			$(document.head).find("#user-specified-css").html(options[name]);
 		}
 	}).find("input")
 		.trigger("change");
@@ -560,7 +577,7 @@ $(function() {
 			.empty();
 
 		if (sidebar.find(".highlight").length === 0) {
-			favico.badge("");
+			toggleFaviconNotification(false);
 		}
 
 		viewport.removeClass("lt");
@@ -665,21 +682,31 @@ $(function() {
 	chat.on("msg", ".messages", function(e, target, msg) {
 		var button = sidebar.find(".chan[data-target='" + target + "']");
 		var isQuery = button.hasClass("query");
-		if (msg.highlight || isQuery || (options.notifyAllMessages && msg.type === "message")) {
+		if (msg.type === "invite" || msg.highlight || isQuery || (options.notifyAllMessages && msg.type === "message")) {
 			if (!document.hasFocus() || !$(target).hasClass("active")) {
 				if (options.notification) {
 					pop.play();
 				}
-				favico.badge("!");
+				toggleFaviconNotification(true);
+
 				if (options.badge && Notification.permission === "granted") {
-					var title = msg.from;
-					if (!isQuery) {
-						title += " (" + button.text().trim() + ")";
+					var title;
+					var body;
+
+					if (msg.type === "invite") {
+						title = "New channel invite:";
+						body = msg.from + " invited you to " + msg.text;
+					} else {
+						title = msg.from;
+						if (!isQuery) {
+							title += " (" + button.text().trim() + ")";
+						}
+						title += " says:";
+						body = msg.text.replace(/\x02|\x1D|\x1F|\x16|\x0F|\x03(?:[0-9]{1,2}(?:,[0-9]{1,2})?)?/, "").trim();
 					}
-					title += " says:";
 
 					var notify = new Notification(title, {
-						body: msg.text.trim(),
+						body: body,
 						icon: "img/logo-64.png",
 						tag: target
 					});
@@ -962,11 +989,20 @@ $(function() {
 		return array;
 	}
 
+	function toggleFaviconNotification(newState) {
+		if (favicon.data("toggled") !== newState) {
+			var old = favicon.attr("href");
+			favicon.attr("href", favicon.data("other"));
+			favicon.data("other", old);
+			favicon.data("toggled", newState);
+		}
+	}
+
 	document.addEventListener(
 		"visibilitychange",
 		function() {
 			if (sidebar.find(".highlight").length === 0) {
-				favico.badge("");
+				toggleFaviconNotification(false);
 			}
 		}
 	);
