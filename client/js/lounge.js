@@ -210,7 +210,6 @@ $(function() {
 		}
 
 		var chan = chat.find(target);
-		var from = data.msg.from;
 		var msg;
 
 		if ([
@@ -223,6 +222,7 @@ $(function() {
 			"quit",
 			"topic",
 			"action",
+			"whois",
 		].indexOf(type) !== -1) {
 			data.msg.template = "actions/" + type;
 			msg = $(render("msg_action", data.msg));
@@ -238,7 +238,7 @@ $(function() {
 		if ((type === "message" || type === "action") && chan.hasClass("channel")) {
 			var nicks = chan.find(".users").data("nicks");
 			if (nicks) {
-				var find = nicks.indexOf(from);
+				var find = nicks.indexOf(data.msg.from);
 				if (find !== -1 && typeof move === "function") {
 					move(nicks, find, 0);
 				}
@@ -407,7 +407,7 @@ $(function() {
 	var userStyles = $("#user-specified-css");
 	var settings = $("#settings");
 	var options = $.extend({
-		badge: false,
+		desktopNotifications: false,
 		colors: false,
 		join: true,
 		links: true,
@@ -467,16 +467,18 @@ $(function() {
 	}).find("input")
 		.trigger("change");
 
-	$("#badge").on("change", function() {
+	$("#desktopNotifications").on("change", function() {
 		var self = $(this);
 		if (self.prop("checked")) {
 			if (Notification.permission !== "granted") {
-				Notification.requestPermission();
+				Notification.requestPermission(updateDesktopNotificationStatus);
 			}
 		}
 	});
 
 	var viewport = $("#viewport");
+	var contextMenuContainer = $("#context-menu-container");
+	var contextMenu = $("#context-menu");
 
 	viewport.on("click", ".lt, .rt", function(e) {
 		var self = $(this);
@@ -487,6 +489,78 @@ $(function() {
 				viewport.removeClass("lt");
 			});
 		}
+	});
+
+	function positionContextMenu(that, e) {
+		var offset;
+		var menuWidth = contextMenu.outerWidth();
+		var menuHeight = contextMenu.outerHeight();
+
+		if (that.hasClass("menu")) {
+			offset = that.offset();
+			offset.left -= menuWidth - that.outerWidth();
+			offset.top += that.outerHeight();
+			return offset;
+		}
+
+		offset = {left: e.pageX, top: e.pageY};
+
+		if ((window.innerWidth - offset.left) < menuWidth) {
+			offset.left = window.innerWidth - menuWidth;
+		}
+
+		if ((window.innerHeight - offset.top) < menuHeight) {
+			offset.top = window.innerHeight - menuHeight;
+		}
+
+		return offset;
+	}
+
+	function showContextMenu(that, e) {
+		var target = $(e.currentTarget);
+		var output = "";
+
+		if (target.hasClass("user")) {
+			output = render("contextmenu_item", {
+				class: "user",
+				text: target.text(),
+				data: target.data("name")
+			});
+		}
+		else if (target.hasClass("chan")) {
+			output = render("contextmenu_item", {
+				class: "chan",
+				text: target.data("title"),
+				data: target.data("target")
+			});
+			output += render("contextmenu_divider");
+			output += render("contextmenu_item", {
+				class: "close",
+				text: target.hasClass("lobby") ? "Disconnect" : target.hasClass("query") ? "Close" : "Leave",
+				data: target.data("target")
+			});
+		}
+
+		contextMenuContainer.show();
+		contextMenu
+			.html(output)
+			.css(positionContextMenu($(that), e));
+
+		return false;
+	}
+
+	viewport.on("contextmenu", ".user, .network .chan", function(e) {
+		return showContextMenu(this, e);
+	});
+
+	viewport.on("click", "#chat .menu", function(e) {
+		e.currentTarget = $(e.currentTarget).closest(".chan")[0];
+		return showContextMenu(this, e);
+	});
+
+	contextMenuContainer.on("click contextmenu", function() {
+		contextMenuContainer.hide();
+		return false;
 	});
 
 	var input = $("#input")
@@ -637,6 +711,20 @@ $(function() {
 		return false;
 	});
 
+	contextMenu.on("click", ".context-menu-item", function() {
+		switch ($(this).data("action")) {
+		case "close":
+			$(".networks .chan[data-target=" + $(this).data("data") + "] .close").click();
+			break;
+		case "chan":
+			$(".networks .chan[data-target=" + $(this).data("data") + "]").click();
+			break;
+		case "user":
+			$(".channel.active .users .user[data-name=" + $(this).data("data") + "]").click();
+			break;
+		}
+	});
+
 	chat.on("input", ".search", function() {
 		var value = $(this).val().toLowerCase();
 		var names = $(this).closest(".users").find(".names");
@@ -665,15 +753,6 @@ $(function() {
 		});
 	});
 
-	chat.on("click", ".close", function() {
-		var id = $(this)
-			.closest(".chan")
-			.data("id");
-		sidebar.find(".chan[data-id='" + id + "']")
-			.find(".close")
-			.click();
-	});
-
 	chat.on("msg", ".messages", function(e, target, msg) {
 		var button = sidebar.find(".chan[data-target='" + target + "']");
 		var isQuery = button.hasClass("query");
@@ -684,7 +763,7 @@ $(function() {
 				}
 				toggleFaviconNotification(true);
 
-				if (options.badge && Notification.permission === "granted") {
+				if (options.desktopNotifications && Notification.permission === "granted") {
 					var title;
 					var body;
 
@@ -694,10 +773,10 @@ $(function() {
 					} else {
 						title = msg.from;
 						if (!isQuery) {
-							title += " (" + button.text().trim() + ")";
+							title += " (" + button.data("title").trim() + ")";
 						}
 						title += " says:";
-						body = msg.text.replace(/\x02|\x1D|\x1F|\x16|\x0F|\x03(?:[0-9]{1,2}(?:,[0-9]{1,2})?)?/, "").trim();
+						body = msg.text.replace(/\x02|\x1D|\x1F|\x16|\x0F|\x03(?:[0-9]{1,2}(?:,[0-9]{1,2})?)?/g, "").trim();
 					}
 
 					var notify = new Notification(title, {
@@ -729,7 +808,7 @@ $(function() {
 			"nick",
 			"mode",
 		];
-		if ($.inArray(msg.type, ignore) !== -1){
+		if ($.inArray(msg.type, ignore) !== -1) {
 			return;
 		}
 
@@ -786,6 +865,8 @@ $(function() {
 			}
 		});
 	});
+
+	windows.on("show", "#settings", updateDesktopNotificationStatus);
 
 	forms.on("submit", "form", function(e) {
 		e.preventDefault();
@@ -852,6 +933,12 @@ $(function() {
 		}
 	});
 
+	Mousetrap.bind([
+		"escape"
+	], function() {
+		contextMenuContainer.hide();
+	});
+
 	setInterval(function() {
 		chat.find(".chan:not(.active)").each(function() {
 			var chan = $(this);
@@ -911,6 +998,23 @@ $(function() {
 	function refresh() {
 		window.onbeforeunload = null;
 		location.reload();
+	}
+
+	function updateDesktopNotificationStatus() {
+		var checkbox = $("#desktopNotifications");
+		var warning = $("#warnDisabledDesktopNotifications");
+
+		if (Notification.permission === "denied") {
+			checkbox.attr("disabled", true);
+			checkbox.attr("checked", false);
+			warning.show();
+		} else {
+			if (Notification.permission === "default" && checkbox.prop("checked")) {
+				checkbox.attr("checked", false);
+			}
+			checkbox.attr("disabled", false);
+			warning.hide();
+		}
 	}
 
 	function sortable() {

@@ -18,6 +18,7 @@ function Chan(attr) {
 		topic: "",
 		type: Chan.Type.CHANNEL,
 		unread: 0,
+		highlight: false,
 		users: []
 	}, attr));
 }
@@ -27,14 +28,8 @@ Chan.prototype.sortUsers = function() {
 		this.users,
 		function(u) { return u.name.toLowerCase(); }
 	);
-	var modes = [
-		"~",
-		"&",
-		"@",
-		"%",
-		"+",
-	].reverse();
-	modes.forEach(function(mode) {
+
+	["+", "%", "@", "&", "~"].forEach(function(mode) {
 		this.users = _.remove(
 			this.users,
 			function(u) { return u.mode === mode; }

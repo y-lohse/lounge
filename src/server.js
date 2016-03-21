@@ -25,13 +25,13 @@ module.exports = function(options) {
 	var protocol = https.enable ? "https" : "http";
 	var port = config.port;
 	var host = config.host;
-	var transports = config.transports || ["websocket", "polling"];
+	var transports = config.transports || ["polling", "websocket"];
 
-	if (!https.enable){
+	if (!https.enable) {
 		server = require("http");
 		server = server.createServer(app).listen(port, host);
 	} else {
-		server = require("https");
+		server = require("spdy");
 		server = server.createServer({
 			key: fs.readFileSync(https.key),
 			cert: fs.readFileSync(https.certificate)

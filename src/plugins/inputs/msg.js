@@ -1,18 +1,17 @@
 var _ = require("lodash");
 
-module.exports = function(network, chan, cmd, args) {
-	if (cmd !== "say" && cmd !== "msg") {
-		return;
-	}
+exports.commands = ["msg", "say"];
+
+exports.input = function(network, chan, cmd, args) {
 	if (args.length === 0 || args[0] === "") {
-		return;
+		return true;
 	}
 	var irc = network.irc;
 	var target = "";
 	if (cmd === "msg") {
 		target = args.shift();
 		if (args.length === 0) {
-			return;
+			return true;
 		}
 	} else {
 		target = chan.name;
@@ -27,4 +26,6 @@ module.exports = function(network, chan, cmd, args) {
 			message: msg
 		});
 	}
+
+	return true;
 };

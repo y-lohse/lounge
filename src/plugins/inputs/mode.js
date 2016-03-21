@@ -1,7 +1,7 @@
-module.exports = function(network, chan, cmd, args) {
-	if (cmd !== "mode" && cmd !== "op" && cmd !== "voice" && cmd !== "deop" && cmd !== "devoice") {
-		return;
-	} else if (args.length === 0) {
+exports.commands = ["mode", "op", "voice", "deop", "devoice"];
+
+exports.input = function(network, chan, cmd, args) {
+	if (args.length === 0) {
 		return;
 	}
 
@@ -16,7 +16,7 @@ module.exports = function(network, chan, cmd, args) {
 			"devoice": "-v"
 		}[cmd];
 	} else if (args.length === 1) {
-		return;
+		return true;
 	} else {
 		mode = args[0];
 		user = args[1];
@@ -27,4 +27,6 @@ module.exports = function(network, chan, cmd, args) {
 		mode,
 		user
 	);
+
+	return true;
 };

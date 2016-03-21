@@ -33,22 +33,29 @@ var events = [
 	"whois"
 ];
 var inputs = [
+	// These inputs are sorted in order that is most likely to be used
+	"msg",
+	"whois",
+	"part",
 	"action",
 	"connect",
 	"invite",
 	"join",
 	"kick",
 	"mode",
-	"msg",
 	"nick",
 	"notice",
-	"part",
 	"quit",
 	"raw",
-	"services",
 	"topic",
-	"whois"
-];
+].reduce(function(plugins, name) {
+	var path = "./plugins/inputs/" + name;
+	var plugin = require(path);
+	plugin.commands.forEach(function(command) {
+		plugins[command] = plugin.input;
+	});
+	return plugins;
+}, {});
 
 function Client(manager, name, config) {
 	_.merge(this, {
@@ -270,25 +277,22 @@ Client.prototype.input = function(data) {
 	var client = this;
 	var text = data.text.trim();
 	var target = client.find(data.target);
-	if (text.charAt(0) !== "/") {
-		text = "/say " + text;
+
+	// This is either a normal message or a command escaped with a leading '/'
+	if (text.charAt(0) !== "/" || text.charAt(1) === "/") {
+		text = "say " + text.replace(/^\//, "");
+	} else {
+		text = text.substr(1);
 	}
+
 	var args = text.split(" ");
-	var cmd = args.shift().replace("/", "").toLowerCase();
-	_.each(inputs, function(plugin) {
-		try {
-			var path = "./plugins/inputs/" + plugin;
-			var fn = require(path);
-			fn.apply(client, [
-				target.network,
-				target.chan,
-				cmd,
-				args
-			]);
-		} catch (e) {
-			console.log(path + ": " + e);
-		}
-	});
+	var cmd = args.shift().toLowerCase();
+
+	if (cmd in inputs) {
+		inputs[cmd].apply(client, [target.network, target.chan, cmd, args]);
+	} else {
+		target.network.irc.write(text);
+	}
 };
 
 Client.prototype.more = function(data) {
@@ -310,6 +314,7 @@ Client.prototype.open = function(data) {
 	var target = this.find(data);
 	if (target) {
 		target.chan.unread = 0;
+		target.chan.highlight = false;
 		this.activeChannel = target.chan.id;
 	}
 };
