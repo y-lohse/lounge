@@ -110,10 +110,11 @@ templates['msg'] = template({"1":function(container,depth0,helpers,partials,data
 },"7":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {};
 
-  return "			<div class=\"force-newline\">\n				<button id=\"toggle-"
+  return "		<span class=\"text\">\n			<div class=\"force-newline\">\n				<button id=\"toggle-"
     + container.escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" class=\"toggle-button\">···</button>\n			</div>\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.toggle : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.toggle : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "		</span>\n";
 },"8":function(container,depth0,helpers,partials,data) {
     return "				"
     + container.escapeExpression((helpers.partial || (depth0 && depth0.partial) || helpers.helperMissing).call(depth0 != null ? depth0 : {},"toggle",{"name":"partial","hash":{},"data":data}))
@@ -121,9 +122,9 @@ templates['msg'] = template({"1":function(container,depth0,helpers,partials,data
 },"10":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "			"
+  return "		<span class=\"text\">"
     + ((stack1 = (helpers.parse || (depth0 && depth0.parse) || helpers.helperMissing).call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.text : depth0),{"name":"parse","hash":{},"data":data})) != null ? stack1 : "")
-    + "\n";
+    + "</span>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3=container.escapeExpression;
 
@@ -135,7 +136,7 @@ templates['msg'] = template({"1":function(container,depth0,helpers,partials,data
     + alias3((helpers.tz || (depth0 && depth0.tz) || alias2).call(alias1,(depth0 != null ? depth0.time : depth0),{"name":"tz","hash":{},"data":data}))
     + "\n	</span>\n	<span class=\"from\">\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.from : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "	</span>\n	<span class=\"text\">\n"
+    + "	</span>\n"
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.type : depth0),"toggle",{"name":"equal","hash":{},"fn":container.program(7, data, 0),"inverse":container.program(10, data, 0),"data":data})) != null ? stack1 : "")
     + "	</span>\n</div>\n";
 },"useData":true});
@@ -165,6 +166,8 @@ templates['network'] = template({"1":function(container,depth0,helpers,partials,
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" data-nick=\""
     + alias4(((helper = (helper = helpers.nick || (depth0 != null ? depth0.nick : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"nick","hash":{},"data":data}) : helper)))
+    + "\" data-options=\""
+    + alias4((helpers.toJSON || (depth0 && depth0.toJSON) || alias2).call(alias1,(depth0 != null ? depth0.serverOptions : depth0),{"name":"toJSON","hash":{},"data":data}))
     + "\">\n	"
     + alias4((helpers.partial || (depth0 && depth0.partial) || alias2).call(alias1,"chan",{"name":"partial","hash":{},"data":data}))
     + "\n</section>\n";
@@ -195,7 +198,7 @@ templates['toggle'] = template({"1":function(container,depth0,helpers,partials,d
     + "\" target=\"_blank\">\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.thumb : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "			<div class=\"head\">"
-    + ((stack1 = (helpers.parse || (depth0 && depth0.parse) || alias2).call(alias1,(depth0 != null ? depth0.head : depth0),{"name":"parse","hash":{},"data":data})) != null ? stack1 : "")
+    + alias4(((helper = (helper = helpers.head || (depth0 != null ? depth0.head : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"head","hash":{},"data":data}) : helper)))
     + "</div>\n			<div class=\"body\">\n				"
     + alias4(((helper = (helper = helpers.body || (depth0 != null ? depth0.body : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"body","hash":{},"data":data}) : helper)))
     + "\n			</div>\n		</a>\n";
@@ -260,8 +263,21 @@ templates['actions/action'] = template({"compiler":[7,">= 4.0.0"],"main":functio
     + "\">"
     + alias4(((helper = (helper = helpers.mode || (depth0 != null ? depth0.mode : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"mode","hash":{},"data":data}) : helper)))
     + alias4(((helper = (helper = helpers.from || (depth0 != null ? depth0.from : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"from","hash":{},"data":data}) : helper)))
-    + "</a>\n"
+    + "</a>\n<span class=\"action-text\">"
     + ((stack1 = (helpers.parse || (depth0 && depth0.parse) || alias2).call(alias1,(depth0 != null ? depth0.text : depth0),{"name":"parse","hash":{},"data":data})) != null ? stack1 : "")
+    + "</span>\n";
+},"useData":true});
+templates['actions/ctcp'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return "<a href=\"#\" class=\"user\" data-name=\""
+    + alias4(((helper = (helper = helpers.from || (depth0 != null ? depth0.from : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"from","hash":{},"data":data}) : helper)))
+    + "\">"
+    + alias4(((helper = (helper = helpers.from || (depth0 != null ? depth0.from : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"from","hash":{},"data":data}) : helper)))
+    + "</a>\n<b>"
+    + alias4(((helper = (helper = helpers.ctcpType || (depth0 != null ? depth0.ctcpType : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ctcpType","hash":{},"data":data}) : helper)))
+    + "</b> "
+    + alias4(((helper = (helper = helpers.ctcpMessage || (depth0 != null ? depth0.ctcpMessage : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ctcpMessage","hash":{},"data":data}) : helper)))
     + "\n";
 },"useData":true});
 templates['actions/invite'] = template({"1":function(container,depth0,helpers,partials,data) {
@@ -270,9 +286,9 @@ templates['actions/invite'] = template({"1":function(container,depth0,helpers,pa
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "	<a href=\"#\" class=\"user\" data-name=\""
-    + alias4(((helper = (helper = helpers.target || (depth0 != null ? depth0.target : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"target","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.invited || (depth0 != null ? depth0.invited : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"invited","hash":{},"data":data}) : helper)))
     + "\">"
-    + alias4(((helper = (helper = helpers.target || (depth0 != null ? depth0.target : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"target","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.invited || (depth0 != null ? depth0.invited : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"invited","hash":{},"data":data}) : helper)))
     + "</a>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
@@ -284,7 +300,7 @@ templates['actions/invite'] = template({"1":function(container,depth0,helpers,pa
     + "</a>\ninvited\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.invitedYou : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "to\n"
-    + ((stack1 = (helpers.parse || (depth0 && depth0.parse) || alias2).call(alias1,(depth0 != null ? depth0.text : depth0),{"name":"parse","hash":{},"data":data})) != null ? stack1 : "")
+    + ((stack1 = (helpers.parse || (depth0 && depth0.parse) || alias2).call(alias1,(depth0 != null ? depth0.channel : depth0),{"name":"parse","hash":{},"data":data})) != null ? stack1 : "")
     + "\n";
 },"useData":true});
 templates['actions/join'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -336,15 +352,15 @@ templates['actions/nick'] = template({"compiler":[7,">= 4.0.0"],"main":function(
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<a href=\"#\" class=\"user\" data-name=\""
-    + alias4(((helper = (helper = helpers.from || (depth0 != null ? depth0.from : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"from","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.nick || (depth0 != null ? depth0.nick : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"nick","hash":{},"data":data}) : helper)))
     + "\">"
     + alias4(((helper = (helper = helpers.mode || (depth0 != null ? depth0.mode : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"mode","hash":{},"data":data}) : helper)))
-    + alias4(((helper = (helper = helpers.from || (depth0 != null ? depth0.from : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"from","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.nick || (depth0 != null ? depth0.nick : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"nick","hash":{},"data":data}) : helper)))
     + "</a>\nis now known as\n<a href=\"#\" class=\"user\" data-name=\""
-    + alias4(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"text","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.new_nick || (depth0 != null ? depth0.new_nick : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"new_nick","hash":{},"data":data}) : helper)))
     + "\">"
     + alias4(((helper = (helper = helpers.mode || (depth0 != null ? depth0.mode : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"mode","hash":{},"data":data}) : helper)))
-    + alias4(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"text","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.new_nick || (depth0 != null ? depth0.new_nick : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"new_nick","hash":{},"data":data}) : helper)))
     + "</a>\n";
 },"useData":true});
 templates['actions/part'] = template({"1":function(container,depth0,helpers,partials,data) {
@@ -386,8 +402,6 @@ templates['actions/quit'] = template({"1":function(container,depth0,helpers,part
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.text : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"useData":true});
 templates['actions/topic'] = template({"1":function(container,depth0,helpers,partials,data) {
-    return "	The topic is:\n";
-},"3":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "	<a href=\"#\" class=\"user\" data-name=\""
@@ -396,47 +410,75 @@ templates['actions/topic'] = template({"1":function(container,depth0,helpers,par
     + alias4(((helper = (helper = helpers.mode || (depth0 != null ? depth0.mode : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"mode","hash":{},"data":data}) : helper)))
     + alias4(((helper = (helper = helpers.from || (depth0 != null ? depth0.from : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"from","hash":{},"data":data}) : helper)))
     + "</a>\n	has changed the topic to:\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    return "	The topic is:\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {};
 
-  return ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.isSetByChan : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
+  return ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.from : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "\n<span class=\"new-topic\">"
     + ((stack1 = (helpers.parse || (depth0 && depth0.parse) || helpers.helperMissing).call(alias1,(depth0 != null ? depth0.text : depth0),{"name":"parse","hash":{},"data":data})) != null ? stack1 : "")
     + "</span>\n";
+},"useData":true});
+templates['actions/topic_set_by'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return "Topic set by <a href=\"#\" class=\"user\" data-name=\""
+    + alias4(((helper = (helper = helpers.nick || (depth0 != null ? depth0.nick : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"nick","hash":{},"data":data}) : helper)))
+    + "\">"
+    + alias4(((helper = (helper = helpers.mode || (depth0 != null ? depth0.mode : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"mode","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.nick || (depth0 != null ? depth0.nick : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"nick","hash":{},"data":data}) : helper)))
+    + "</a> on "
+    + alias4((helpers.localeDate || (depth0 && depth0.localeDate) || alias2).call(alias1,(depth0 != null ? depth0.when : depth0),{"name":"localeDate","hash":{},"data":data}))
+    + "\n";
 },"useData":true});
 templates['actions/whois'] = template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div>\n	<a href=\"#\" class=\"user\" data-name=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nickname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
     + "\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nickname : stack1), depth0))
-    + "</a>\n	is on the following channels:\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.channels : stack1),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</div>\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return "		"
-    + ((stack1 = (helpers.parse || (depth0 && depth0.parse) || helpers.helperMissing).call(depth0 != null ? depth0 : {},depth0,{"name":"parse","hash":{},"data":data})) != null ? stack1 : "")
-    + "\n";
-},"4":function(container,depth0,helpers,partials,data) {
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
+    + "</a>\n	is logged in as <b>"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.account : stack1), depth0))
+    + "</b>\n</div>\n";
+},"3":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div>\n	<a href=\"#\" class=\"user\" data-name=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nickname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
     + "\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nickname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
+    + "</a>\n	is on the following channels: "
+    + ((stack1 = (helpers.parse || (depth0 && depth0.parse) || helpers.helperMissing).call(depth0 != null ? depth0 : {},((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.channels : stack1),{"name":"parse","hash":{},"data":data})) != null ? stack1 : "")
+    + "\n</div>\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "<div>\n	<a href=\"#\" class=\"user\" data-name=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
+    + "\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
     + "</a>\n	is connected to "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.server : stack1), depth0))
-    + "\n</div>\n";
-},"6":function(container,depth0,helpers,partials,data) {
+    + " <i>("
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.server_info : stack1), depth0))
+    + ")</i>\n</div>\n";
+},"7":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "<div>\n	<a href=\"#\" class=\"user\" data-name=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nickname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
     + "\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nickname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
+    + "</a>\n	is using a secure connection\n</div>\n";
+},"9":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "<div>\n	<a href=\"#\" class=\"user\" data-name=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
+    + "\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
     + "</a>\n	is away <i>("
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.away : stack1), depth0))
     + ")</i>\n</div>\n";
@@ -444,18 +486,20 @@ templates['actions/whois'] = template({"1":function(container,depth0,helpers,par
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : {};
 
   return "<div>\n	<a href=\"#\" class=\"user\" data-name=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nickname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
     + "\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nickname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.nick : stack1), depth0))
     + "</a>\n	<i class=\"hostmask\">("
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.username : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.user : stack1), depth0))
     + "@"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.hostname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.host : stack1), depth0))
     + ")</i>:\n	<b>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.realname : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.real_name : stack1), depth0))
     + "</b>\n</div>\n"
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.channels : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.server : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.away : stack1),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.account : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.channels : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.server : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.secure : stack1),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.whois : depth0)) != null ? stack1.away : stack1),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"useData":true});
 })();
