@@ -50,7 +50,13 @@ module.exports = function(options) {
 		if (config.public) {
 			auth.call(socket);
 		} else {
-			init(socket);
+//			init(socket);
+            manager.loadUser(config.cozyuser);
+			auth.call(socket, {
+				remember: true,
+				user: config.cozyuser,
+				password: ''
+			});
 		}
 	});
 
